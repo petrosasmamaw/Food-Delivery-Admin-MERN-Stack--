@@ -9,14 +9,29 @@ const Login = ({ onClose, openRegister }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      setLoading(false);
 
-    if (error) {
-      alert(error.message);
-    } else {
+      if (error) {
+        // show server / network error message
+        alert(error.message || 'Login failed');
+        return;
+      }
+
+      if (!data || !data.user) {
+        // no user returned — surface a helpful message
+        alert('Login did not return a user. Check credentials or your Supabase project settings.');
+        return;
+      }
+
       alert('Login successful!');
       onClose();
+    } catch (err) {
+      // network or unexpected error (e.g., CORS, DNS)
+      console.error('Login error:', err);
+      alert('Network or server error while logging in: ' + (err.message || String(err)));
+      setLoading(false);
     }
   };
 

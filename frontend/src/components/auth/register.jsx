@@ -10,17 +10,32 @@ const Register = ({ onClose, openLogin }) => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password });
 
-    if (error) {
-      setLoading(false);
-      alert(error.message);
-    } else {
-      // Optionally, save fullName in Supabase profile table
-      await supabase.from('profiles').upsert({ id: data.user.id, full_name: fullName });
+      if (error) {
+        setLoading(false);
+        alert(error.message || 'Registration failed');
+        return;
+      }
+
+      // Optionally, save fullName in Supabase profile table if user id is returned
+      const userId = data?.user?.id;
+      if (userId) {
+        try {
+          await supabase.from('profiles').upsert({ id: userId, full_name: fullName });
+        } catch (e) {
+          console.warn('Could not upsert profile:', e);
+        }
+      }
+
       setLoading(false);
       alert('Registration successful! Check your email to confirm.');
       onClose();
+    } catch (err) {
+      console.error('Register error:', err);
+      setLoading(false);
+      alert('Network or server error while registering: ' + (err.message || String(err)));
     }
   };
 
