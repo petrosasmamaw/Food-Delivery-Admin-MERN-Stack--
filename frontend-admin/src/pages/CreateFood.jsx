@@ -33,7 +33,7 @@ export default function CreateFood(){
         <input value={form.name} onChange={e=>setForm({...form, name: e.target.value})} placeholder="Name" className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-200" />
         <input value={form.price} onChange={e=>setForm({...form, price: e.target.value})} placeholder="Price" type="number" className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-200" />
         <input value={form.category} onChange={e=>setForm({...form, category: e.target.value})} placeholder="Category" className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-200" />
-        <textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} placeholder="Description" className="w-full p-3 border border-gray-200 rounded-lg h-28"></textarea>
+        <textarea value= "Food provides essential nutrients for overall health and well-being " onChange={e=>setForm({...form, description: e.target.value})} placeholder="Description" className="w-full p-3 border border-gray-200 rounded-lg h-28"></textarea>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
           <input type="file" onChange={e=>setFile(e.target.files[0])} className="w-full text-sm text-gray-600" />
